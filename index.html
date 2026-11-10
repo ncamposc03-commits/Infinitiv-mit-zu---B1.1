@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infinitiv mit zu: Sätze bauen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #F3F5FF;
+      --bg-gradient: radial-gradient(circle at 100% 100%, #FFF4E6 0%, transparent 50%), radial-gradient(circle at 0% 0%, #E3E8FF 0%, transparent 50%);
+      --panel-bg: #FFFFFF;
+      --panel-shadow: 0 10px 25px -5px rgba(59, 63, 158, 0.08), 0 8px 10px -6px rgba(59, 63, 158, 0.04);
+      --text-main: #232042;
+      --text-muted: #625F82;
+      --primary: #3B3F9E;
+      --accent-zu: #2F6BFF;
+      --accent-chip: #FFD25E;
+      --accent-chip-border: #E8B531;
+      --accent-chip-text: #2A2340;
+      --success-bg: #E3F8EE;
+      --success-border: #2DBE7E;
+      --success-text: #0D6938;
+      --error-bg: #FFE8E8;
+      --error-border: #FF6B6B;
+      --error-text: #9E2A2A;
+      --border-color: #E2E6F3;
+      --radius: 16px;
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      /* Category accent colors */
+      --cat-1: #3B3F9E;
+      --cat-2: #19B5A5;
+      --cat-3: #FF7A7A;
+      --cat-4: #E8B531;
+      --cat-5: #8B5CF6;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-page: #14162B;
+        --bg-gradient: radial-gradient(circle at 100% 100%, #291F1A 0%, transparent 50%), radial-gradient(circle at 0% 0%, #1A1E36 0%, transparent 50%);
+        --panel-bg: #1E2142;
+        --panel-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        --text-main: #ECEEFF;
+        --text-muted: #A0A4C8;
+        --primary: #6A6FE8;
+        --accent-zu: #528BFF;
+        --accent-chip: #3A3D68;
+        --accent-chip-border: #565C94;
+        --accent-chip-text: #FFF7D6;
+        --success-bg: #133322;
+        --success-border: #2DBE7E;
+        --success-text: #76E8B2;
+        --error-bg: #3D1C1C;
+        --error-border: #FF6B6B;
+        --error-text: #FFA8A8;
+        --border-color: #2F335C;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Nunito', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-page);
+      background-image: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      line-height: 1.5;
+    }
+
+    h1, h2, h3, .chip, button.action-btn, .category-btn {
+      font-family: 'Fredoka', system-ui, sans-serif;
+    }
+
+    header {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto 20px auto;
+      background: var(--panel-bg);
+      padding: 20px 28px;
+      border-radius: var(--radius);
+      box-shadow: var(--panel-shadow);
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .header-title-area h1 {
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      color: var(--primary);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .header-title-area h1 span.zu-highlight {
+      color: var(--accent-zu);
+      background: rgba(47, 107, 255, 0.1);
+      padding: 2px 10px;
+      border-radius: 8px;
+    }
+
+    .header-title-area p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 2px;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .progress-widget {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      background: var(--bg-page);
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      min-width: 150px;
+    }
+
+    .progress-text {
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: var(--border-color);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--accent-zu);
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    .btn-icon {
+      background: var(--bg-page);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: var(--transition);
+    }
+
+    .btn-icon:hover {
+      background: var(--accent-zu);
+      color: #fff;
+      border-color: var(--accent-zu);
+    }
+
+    .btn-primary {
+      background: var(--accent-zu);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(47, 107, 255, 0.25);
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    main {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 24px;
+      flex: 1;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      background: var(--panel-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--panel-shadow);
+      border: 1px solid var(--border-color);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Left Sidebar: Categories & Sentence list */
+    .sidebar h2 {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .category-group {
+      margin-bottom: 20px;
+    }
+
+    .category-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .category-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .sentence-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-left: 18px;
+      border-left: 2px solid var(--border-color);
+      margin-left: 4px;
+    }
+
+    .category-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-main);
+      padding: 8px 12px;
+      border-radius: 10px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 600;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      min-height: 40px;
+    }
+
+    .category-btn:hover {
+      background: var(--bg-page);
+      border-color: var(--border-color);
+    }
+
+    .category-btn.active {
+      background: rgba(47, 107, 255, 0.1);
+      border-color: var(--accent-zu);
+      color: var(--accent-zu);
+    }
+
+    .category-btn.solved .check-icon {
+      color: var(--success-border);
+      font-weight: bold;
+    }
+
+    /* Right Area: Workspace */
+    .workspace {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .workspace-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .task-meta {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .scrambled-hint {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      background: var(--bg-page);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px dashed var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .grammar-tip {
+      font-size: 0.78rem;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* Sentence Builder Zones */
+    .builder-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sentence-display-area {
+      background: var(--bg-page);
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius);
+      padding: 20px;
+      min-height: 110px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+
+    .sentence-display-area.correct-state {
+      background: var(--success-bg);
+      border-color: var(--success-border);
+      border-style: solid;
+    }
+
+    .sentence-display-area.error-state {
+      background: var(--error-bg);
+      border-color: var(--error-border);
+      border-style: solid;
+    }
+
+    .fixed-starter {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--primary);
+      padding: 6px 10px;
+      background: var(--panel-bg);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .empty-drop-placeholder {
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 0.95rem;
+      user-select: none;
+    }
+
+    /* Chips */
+    .chip {
+      background: var(--accent-chip);
+      color: var(--accent-chip-text);
+      border: 2px solid var(--accent-chip-border);
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 0 var(--accent-chip-border);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.2s;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      min-height: 44px;
+    }
+
+    .chip:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .chip:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--accent-chip-border);
+    }
+
+    .chip.zu-chip {
+      background: var(--accent-zu);
+      color: #ffffff;
+      border-color: #1a4cd6;
+      box-shadow: 0 4px 0 #1a4cd6;
+    }
+
+    .chip.zu-chip:active {
+      box-shadow: 0 1px 0 #1a4cd6;
+    }
+
+    .pool-area {
+      background: var(--bg-page);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      min-height: 90px;
+      align-items: center;
+    }
+
+    /* Action Buttons Row */
+    .actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .btn-secondary {
+      background: var(--bg-page);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--border-color);
+    }
+
+    .btn-secondary:disabled, .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Feedback Box */
+    .feedback-box {
+      margin-top: 15px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .feedback-box.success {
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: var(--success-text);
+      display: block;
+    }
+
+    .feedback-box.error {
+      background: var(--error-bg);
+      border: 1px solid var(--error-border);
+      color: var(--error-text);
+      display: block;
+    }
+
+    .feedback-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Animations */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    .shake {
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes jump {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .jump {
+      animation: jump 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Completion Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 22, 43, 0.7);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 32px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      transform: scale(0.95);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.visible .modal-card {
+      transform: scale(1);
+    }
+
+    .modal-card h2 {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    .modal-card p {
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      font-size: 1.1rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-title-area">
+      <h1>Infinitiv mit <span class="zu-highlight">zu</span>: Sätze bauen</h1>
+      <p>Ordne die Satzglieder und platziere „zu“ an der richtigen Stelle.</p>
+    </div>
+    <div class="header-controls">
+      <div class="progress-widget">
+        <div class="progress-text">
+          <span>Richtig:</span>
+          <span id="score-text">0 von 17</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div id="progress-fill" class="progress-bar-fill"></div>
+        </div>
+      </div>
+      <button id="sound-toggle-btn" class="btn-icon" title="Ton umschalten" aria-label="Ton umschalten">🔊</button>
+      <button id="restart-all-btn" class="btn-primary" style="padding: 10px 14px; font-size: 0.9rem;">Alles neu starten</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Left Column: Categories and Sentence List -->
+    <aside class="panel sidebar" aria-label="Satzkategorien">
+      <h2>Kategorien</h2>
+      <div id="categories-container"></div>
+    </aside>
+
+    <!-- Right Column: Interactive Workspace -->
+    <section class="panel workspace" aria-label="Arbeitsbereich">
+      <div class="workspace-header">
+        <div class="task-meta" id="current-cat-label">Kategorie 1</div>
+        <div class="scrambled-hint" id="scrambled-hint-text">
+          <span id="scrambled-elements"></span>
+          <span class="grammar-tip">💡 Faustregel: Wann? (Zeit) &rarr; Wer? (Person) &rarr; Wo/Wohin? (Ort) &rarr; Infinitiv am Ende</span>
+        </div>
+      </div>
+
+      <div class="builder-container">
+        <!-- Answer Line -->
+        <div>
+          <label style="font-size: 0.85rem; font-weight:700; color:var(--text-muted); margin-bottom:6px; display:block;">Deine Lösung:</label>
+          <div id="sentence-drop-area" class="sentence-display-area" aria-label="Bereich zum Zusammenbauen der Satzteile">
+            <span class="empty-drop-placeholder">Tippe auf die Satzteile unten, um den Satz zu bauen...</span>
+          </div>
+        </div>
+
+        <!-- Token Pool -->
+        <div>
+          <label style="font-size: 0.85rem; font-weight:700; color:var(--text-muted); margin-bottom:6px; display:block;">Verfügbare Satzteile:</label>
+          <div id="token-pool" class="pool-area" aria-label="Verfügbare Satzteile"></div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="actions-row">
+          <button id="btn-check" class="btn-primary" disabled>Prüfen</button>
+          <button id="btn-undo" class="btn-secondary">Zurück</button>
+          <button id="btn-shuffle" class="btn-secondary">Neu mischen</button>
+          <button id="btn-solution" class="btn-secondary">Lösung zeigen</button>
+        </div>
+
+        <!-- Feedback & Hints -->
+        <div id="feedback-box" class="feedback-box">
+          <div id="feedback-title" class="feedback-title"></div>
+          <div id="feedback-message"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Completion Modal -->
+  <div id="completion-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div style="font-size: 3.5rem; margin-bottom: 10px;">🎉</div>
+      <h2>Alle Sätze geschafft!</h2>
+      <p>Du bist spitze! Du hast alle 17 Sätze mit Infinitiv mit zu erfolgreich gemeistert.</p>
+      <button id="modal-restart-btn" class="btn-primary" style="width: 100%; justify-content: center; font-size: 1.1rem; padding: 12px;">Nochmal spielen</button>
+    </div>
+  </div>
+
+  <script>
+    // Database of sentences according to specifications
+    const sentencesData = [
+      { id: 0, catId: 1, catTitle: "1. Ich habe (kein/keine) …", starter: "Ich habe keine Lust,", rawTokens: ["am Wochenende", "mit meiner Schwester", "einkaufen", "zu", "gehen"], correctOrder: ["am Wochenende", "mit meiner Schwester", "einkaufen", "zu", "gehen"], swap: [0, 1] },
+      { id: 1, catId: 1, catTitle: "1. Ich habe (kein/keine) …", starter: "Ich habe keine Zeit,", rawTokens: ["morgen um acht", "den Arzt", "an-", "zu", "-rufen"], correctOrder: ["morgen um acht", "den Arzt", "an-", "zu", "-rufen"], swap: [0, 1] },
+      { id: 2, catId: 1, catTitle: "1. Ich habe (kein/keine) …", starter: "Ich habe den Wunsch,", rawTokens: ["nach dem Studium", "in einer Großstadt", "zu", "leben"], correctOrder: ["nach dem Studium", "in einer Großstadt", "zu", "leben"] },
+      { id: 3, catId: 1, catTitle: "1. Ich habe (kein/keine) …", starter: "Ich habe Angst,", rawTokens: ["abends", "allein", "nach Hause", "zu", "gehen"], correctOrder: ["abends", "allein", "nach Hause", "zu", "gehen"] },
+      
+      { id: 4, catId: 2, catTitle: "2. Es ist (nicht) …", starter: "Es ist nicht leicht,", rawTokens: ["jeden Morgen", "um sechs Uhr", "auf-", "zu", "-stehen"], correctOrder: ["jeden Morgen", "um sechs Uhr", "auf-", "zu", "-stehen"] },
+      { id: 5, catId: 2, catTitle: "2. Es ist (nicht) …", starter: "Es ist wichtig,", rawTokens: ["jeden Tag", "Deutsch", "zu", "üben"], correctOrder: ["jeden Tag", "Deutsch", "zu", "üben"], swap: [0, 1] },
+      { id: 6, catId: 2, catTitle: "2. Es ist (nicht) …", starter: "Es ist schön,", rawTokens: ["im Sommer", "mit Freunden", "am Meer", "zu", "grillen"], correctOrder: ["im Sommer", "mit Freunden", "am Meer", "zu", "grillen"], swap: [1, 2] },
+      
+      { id: 7, catId: 3, catTitle: "3. Ich finde es (nicht) …", starter: "Ich finde es interessant,", rawTokens: ["im Urlaub", "mit Menschen aus anderen Ländern", "zu", "sprechen"], correctOrder: ["im Urlaub", "mit Menschen aus anderen Ländern", "zu", "sprechen"] },
+      { id: 8, catId: 3, catTitle: "3. Ich finde es (nicht) …", starter: "Ich finde es nicht gut,", rawTokens: ["vor dem Schlafen", "den Fernseher", "ein-", "zu", "-schalten"], correctOrder: ["vor dem Schlafen", "den Fernseher", "ein-", "zu", "-schalten"], swap: [0, 1] },
+      { id: 9, catId: 3, catTitle: "3. Ich finde es (nicht) …", starter: "Ich finde es praktisch,", rawTokens: ["in der Stadt", "mit dem Fahrrad", "zu", "fahren"], correctOrder: ["in der Stadt", "mit dem Fahrrad", "zu", "fahren"], swap: [0, 1] },
+      
+      { id: 10, catId: 4, catTitle: "4. Es macht …", starter: "Es macht Spaß,", rawTokens: ["am Samstag", "mit Freunden", "zu", "kochen"], correctOrder: ["am Samstag", "mit Freunden", "zu", "kochen"], swap: [0, 1] },
+      { id: 11, catId: 4, catTitle: "4. Es macht …", starter: "Es macht Freude,", rawTokens: ["am Sonntag", "im Park", "spazieren", "zu", "gehen"], correctOrder: ["am Sonntag", "im Park", "spazieren", "zu", "gehen"] },
+      
+      { id: 12, catId: 5, catTitle: "5. Verb …", starter: "Ich habe vergessen,", rawTokens: ["heute Morgen", "die Tür", "ab-", "zu", "-schließen"], correctOrder: ["heute Morgen", "die Tür", "ab-", "zu", "-schließen"], swap: [0, 1] },
+      { id: 13, catId: 5, catTitle: "5. Verb …", starter: "Der Arzt rät mir,", rawTokens: ["in den nächsten Wochen", "mehr Wasser", "zu", "trinken"], correctOrder: ["in den nächsten Wochen", "mehr Wasser", "zu", "trinken"] },
+      { id: 14, catId: 5, catTitle: "5. Verb …", starter: "Wir haben vor,", rawTokens: ["im August", "nach Italien", "zu", "fahren"], correctOrder: ["im August", "nach Italien", "zu", "fahren"] },
+      { id: 15, catId: 5, catTitle: "5. Verb …", starter: "Mein Bruder schlägt vor,", rawTokens: ["am Freitag", "zusammen", "ins Konzert", "zu", "gehen"], correctOrder: ["am Freitag", "zusammen", "ins Konzert", "zu", "gehen"] },
+      { id: 16, catId: 5, catTitle: "5. Verb …", starter: "Ich höre auf,", rawTokens: ["nächsten Monat", "zu", "rauchen"], correctOrder: ["nächsten Monat", "zu", "rauchen"] }
+    ];
+
+    const categoriesList = [
+      { id: 1, title: "1. Ich habe (kein/keine) …", color: "var(--cat-1)" },
+      { id: 2, title: "2. Es ist (nicht) …", color: "var(--cat-2)" },
+      { id: 3, title: "3. Ich finde es (nicht) …", color: "var(--cat-3)" },
+      { id: 4, title: "4. Es macht …", color: "var(--cat-4)" },
+      { id: 5, title: "5. Verb …", color: "var(--cat-5)" }
+    ];
+
+    // State management
+    let currentIndex = 0;
+    let userProgress = new Array(sentencesData.length).fill(false);
+    let currentPool = [];
+    let currentLine = [];
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    // DOM Elements
+    const categoriesContainer = document.getElementById('categories-container');
+    const currentCatLabel = document.getElementById('current-cat-label');
+    const scrambledElements = document.getElementById('scrambled-elements');
+    const sentenceDropArea = document.getElementById('sentence-drop-area');
+    const tokenPool = document.getElementById('token-pool');
+    const btnCheck = document.getElementById('btn-check');
+    const btnUndo = document.getElementById('btn-undo');
+    const btnShuffle = document.getElementById('btn-shuffle');
+    const btnSolution = document.getElementById('btn-solution');
+    const feedbackBox = document.getElementById('feedback-box');
+    const feedbackTitle = document.getElementById('feedback-title');
+    const feedbackMessage = document.getElementById('feedback-message');
+    const scoreText = document.getElementById('score-text');
+    const progressFill = document.getElementById('progress-fill');
+    const soundToggleBtn = document.getElementById('sound-toggle-btn');
+    const restartAllBtn = document.getElementById('restart-all-btn');
+    const completionModal = document.getElementById('completion-modal');
+    const modalRestartBtn = document.getElementById('modal-restart-btn');
+
+    // Audio synthesizer using Web Audio API
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+          audioCtx = new AudioContext();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playSound(type) {
+      if (!soundEnabled) return;
+      initAudio();
+      if (!audioCtx) return;
+
+      const now = audioCtx.currentTime;
+      const gainNode = audioCtx.createGain();
+      gainNode.connect(audioCtx.destination);
+
+      if (type === 'click') {
+        const osc = audioCtx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(600, now);
+        osc.frequency.exponentialRampToValueAtTime(300, now + 0.03);
+        gainNode.gain.setValueAtTime(0.03, now);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+        osc.connect(gainNode);
+        osc.start(now);
+        osc.stop(now + 0.03);
+      } else if (type === 'success') {
+        const notes = [523.25, 659.25, 783.99];
+        notes.forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+          gainNode.gain.setValueAtTime(0.08, now + idx * 0.08);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.15);
+          osc.connect(gainNode);
+          osc.start(now + idx * 0.08);
+          osc.stop(now + idx * 0.08 + 0.15);
+        });
+      } else if (type === 'error') {
+        const osc = audioCtx.createOscillator();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.exponentialRampToValueAtTime(150, now + 0.2);
+        gainNode.gain.setValueAtTime(0.06, now);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+        osc.connect(gainNode);
+        osc.start(now);
+        osc.stop(now + 0.25);
+      }
+    }
+
+    // Initialize application
+    function initApp() {
+      renderSidebar();
+      loadSentence(currentIndex);
+      updateScore();
+
+      soundToggleBtn.addEventListener('click', () => {
+        soundEnabled = !soundEnabled;
+        soundToggleBtn.textContent = soundEnabled ? "🔊" : "🔇";
+      });
+
+      restartAllBtn.addEventListener('click', () => {
+        userProgress.fill(false);
+        currentIndex = 0;
+        renderSidebar();
+        loadSentence(currentIndex);
+        updateScore();
+      });
+
+      modalRestartBtn.addEventListener('click', () => {
+        completionModal.classList.remove('visible');
+        userProgress.fill(false);
+        currentIndex = 0;
+        renderSidebar();
+        loadSentence(currentIndex);
+        updateScore();
+      });
+
+      btnCheck.addEventListener('click', checkAnswer);
+      btnUndo.addEventListener('click', undoToken);
+      btnShuffle.addEventListener('click', () => shuffleCurrentSentence(false));
+      btnSolution.addEventListener('click', showSolution);
+    }
+
+    // Render Sidebar grouped by categories
+    function renderSidebar() {
+      categoriesContainer.innerHTML = '';
+      categoriesList.forEach(cat => {
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'category-group';
+
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'category-title';
+        titleDiv.innerHTML = `<span class="category-dot" style="background:${cat.color};"></span>${cat.title}`;
+        groupDiv.appendChild(titleDiv);
+
+        const listDiv = document.createElement('div');
+        listDiv.className = 'sentence-list';
+
+        const catSentences = sentencesData
+          .map((s, idx) => ({ ...s, globalIdx: idx }))
+          .filter(s => s.catId === cat.id);
+
+        catSentences.forEach((s, subIdx) => {
+          const btn = document.createElement('button');
+          btn.className = 'category-btn';
+          if (s.globalIdx === currentIndex) btn.classList.add('active');
+          if (userProgress[s.globalIdx]) btn.classList.add('solved');
+
+          const labelSpan = document.createElement('span');
+          labelSpan.textContent = `${subIdx + 1}. ${s.starter}`;
+          btn.appendChild(labelSpan);
+
+          if (userProgress[s.globalIdx]) {
+            const check = document.createElement('span');
+            check.className = 'check-icon';
+            check.textContent = '✓';
+            btn.appendChild(check);
+          }
+
+          btn.addEventListener('click', () => {
+            playSound('click');
+            currentIndex = s.globalIdx;
+            renderSidebar();
+            loadSentence(currentIndex);
+          });
+
+          listDiv.appendChild(btn);
+        });
+
+        groupDiv.appendChild(listDiv);
+        categoriesContainer.appendChild(groupDiv);
+      });
+    }
+
+    // Load a specific sentence
+    function loadSentence(idx) {
+      const sentence = sentencesData[idx];
+      currentCatLabel.textContent = sentence.catTitle;
+      
+      shuffleCurrentSentence(true);
+      hideFeedback();
+    }
+
+    function shuffleCurrentSentence(resetLine) {
+      const sentence = sentencesData[currentIndex];
+      if (resetLine) {
+        currentLine = [];
+      }
+      let tokens = [...sentence.rawTokens];
+      for (let i = tokens.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [tokens[i], tokens[j]] = [tokens[j], tokens[i]];
+      }
+      currentPool = tokens.map((text, id) => ({ id: `token-${id}`, text }));
+      renderWorkspace();
+      playSound('click');
+    }
+
+    function renderWorkspace() {
+      const sentence = sentencesData[currentIndex];
+      
+      // Update hint text with elements and rule
+      scrambledElements.textContent = `Elemente: ${sentence.rawTokens.join(" / ")}`;
+
+      // Render sentence drop area
+      sentenceDropArea.innerHTML = '';
+      sentenceDropArea.className = 'sentence-display-area';
+
+      const starterSpan = document.createElement('span');
+      starterSpan.className = 'fixed-starter';
+      starterSpan.textContent = sentence.starter;
+      sentenceDropArea.appendChild(starterSpan);
+
+      if (currentLine.length === 0) {
+        const placeholder = document.createElement('span');
+        placeholder.className = 'empty-drop-placeholder';
+        placeholder.textContent = 'Tippe auf die Satzteile unten...';
+        sentenceDropArea.appendChild(placeholder);
+      } else {
+        currentLine.forEach((item, idx) => {
+          const chip = createChipElement(item, () => {
+            playSound('click');
+            currentLine.splice(idx, 1);
+            currentPool.push(item);
+            renderWorkspace();
+          });
+          sentenceDropArea.appendChild(chip);
+        });
+      }
+
+      // Render pool area
+      tokenPool.innerHTML = '';
+      if (currentPool.length === 0) {
+        const emptyMsg = document.createElement('span');
+        emptyMsg.style.color = 'var(--text-muted)';
+        emptyMsg.style.fontStyle = 'italic';
+        emptyMsg.style.fontSize = '0.9rem';
+        emptyMsg.textContent = 'Alle Satzteile wurden platziert.';
+        tokenPool.appendChild(emptyMsg);
+      } else {
+        currentPool.forEach(item => {
+          const chip = createChipElement(item, () => {
+            playSound('click');
+            currentPool = currentPool.filter(t => t.id !== item.id);
+            currentLine.push(item);
+            renderWorkspace();
+          });
+          tokenPool.appendChild(chip);
+        });
+      }
+
+      btnCheck.disabled = currentPool.length > 0;
+      btnUndo.disabled = currentLine.length === 0;
+    }
+
+    function createChipElement(item, onClickHandler) {
+      const div = document.createElement('div');
+      div.className = 'chip';
+      if (item.text === 'zu') {
+        div.classList.add('zu-chip');
+      }
+      div.textContent = item.text;
+      div.addEventListener('click', onClickHandler);
+      return div;
+    }
+
+    function undoToken() {
+      if (currentLine.length === 0) return;
+      playSound('click');
+      const item = currentLine.pop();
+      currentPool.push(item);
+      renderWorkspace();
+    }
+
+    // Check Answer Logic
+    function checkAnswer() {
+      const sentence = sentencesData[currentIndex];
+      const userTexts = currentLine.map(t => t.text);
+
+      let isCorrect = false;
+      const correct = sentence.correctOrder;
+
+      if (arraysEqual(userTexts, correct)) {
+        isCorrect = true;
+      } else if (sentence.swap && sentence.swap.length === 2) {
+        const [i, j] = sentence.swap;
+        let variant1 = [...correct];
+        let variant2 = [...correct];
+        variant2[i] = correct[j];
+        variant2[j] = correct[i];
+
+        if (arraysEqual(userTexts, variant1) || arraysEqual(userTexts, variant2)) {
+          isCorrect = true;
+        }
+      }
+
+      if (isCorrect) {
+        handleSuccess(sentence);
+      } else {
+        handleError(sentence, userTexts);
+      }
+    }
+
+    function arraysEqual(a, b) {
+      if (a.length !== b.length) return false;
+      for (let i = 0; i < a.length; i++) {
+        if (a[i] !== b[i]) return false;
+      }
+      return true;
+    }
+
+    function handleSuccess(sentence) {
+      playSound('success');
+      userProgress[currentIndex] = true;
+      renderSidebar();
+      updateScore();
+
+      sentenceDropArea.classList.add('correct-state');
+      sentenceDropArea.classList.add('jump');
+      setTimeout(() => sentenceDropArea.classList.remove('jump'), 300);
+
+      const successPhrases = ["Gut gemacht!", "Super!", "Ausgezeichnet!", "Prima!", "Genau richtig!", "Das war perfekt!"];
+      const randomPhrase = successPhrases[Math.floor(Math.random() * successPhrases.length)];
+      const emojis = ["🎉", "⭐", "👏", "🌟"];
+      const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+
+      const fullText = buildFormattedSentence(sentence.starter, currentLine.map(t => t.text));
+
+      feedbackTitle.innerHTML = `${randomEmoji} ${randomPhrase}`;
+      feedbackMessage.innerHTML = `<strong>${fullText}</strong>`;
+      feedbackBox.className = 'feedback-box success';
+
+      if (userProgress.every(Boolean)) {
+        setTimeout(() => {
+          completionModal.classList.add('visible');
+        }, 800);
+      }
+    }
+
+    function handleError(sentence, userTexts) {
+      playSound('error');
+      sentenceDropArea.classList.add('error-state');
+      sentenceDropArea.classList.add('shake');
+      setTimeout(() => sentenceDropArea.classList.remove('shake'), 400);
+
+      const errorPhrases = [
+        "Fast! Versuch es noch einmal.",
+        "Noch nicht ganz, du schaffst das!",
+        "Nicht aufgeben, probier es nochmal!",
+        "Schau dir die Reihenfolge noch einmal an."
+      ];
+      const randomErrorPhrase = errorPhrases[Math.floor(Math.random() * errorPhrases.length)];
+
+      let hint = "";
+      const zuIndex = userTexts.indexOf("zu");
+      const isSeparable = sentence.rawTokens.includes("an-") || sentence.rawTokens.includes("auf-") || sentence.rawTokens.includes("ein-") || sentence.rawTokens.includes("ab-");
+
+      if (sentence.catId === 5 || isSeparable) {
+        hint = "Bei trennbaren Verben steht zu zwischen Präfix und Verb (an-zu-rufen). ";
+      } else {
+        hint = "Der Infinitiv steht am Ende, direkt vor ihm steht zu. ";
+      }
+
+      if (zuIndex === -1) {
+        hint += "Du hast „zu“ vergessen!";
+      } else {
+        const lastToken = userTexts[userTexts.length - 1];
+        const isLastVerb = !lastToken.endsWith("-") && !lastToken.startsWith("-") && zuIndex === userTexts.length - 2;
+        const isSeparableCorrect = isSeparable && zuIndex === userTexts.length - 2;
+
+        if (!isLastVerb && !isSeparableCorrect) {
+          hint += "Prüfe die Position von zu.";
+        }
+      }
+
+      feedbackTitle.textContent = randomErrorPhrase;
+      feedbackMessage.textContent = hint;
+      feedbackBox.className = 'feedback-box error';
+    }
+
+    function showSolution() {
+      playSound('click');
+      const sentence = sentencesData[currentIndex];
+      currentLine = sentence.correctOrder.map((text, idx) => ({ id: `sol-${idx}`, text }));
+      currentPool = [];
+      renderWorkspace();
+      hideFeedback();
+    }
+
+    function hideFeedback() {
+      feedbackBox.className = 'feedback-box';
+      feedbackBox.style.display = 'none';
+      sentenceDropArea.className = 'sentence-display-area';
+    }
+
+    function buildFormattedSentence(starter, tokensArray) {
+      let combined = "";
+      for (let i = 0; i < tokensArray.length; i++) {
+        let t = tokensArray[i];
+        if (t.endsWith("-")) {
+          combined += t.slice(0, -1);
+        } else if (t.startsWith("-")) {
+          combined += t.slice(1);
+          if (i < tokensArray.length - 1) combined += " ";
+        } else {
+          combined += t;
+          if (i < tokensArray.length - 1) combined += " ";
+        }
+      }
+      return `${starter} ${combined}.`;
+    }
+
+    function updateScore() {
+      const correctCount = userProgress.filter(Boolean).length;
+      scoreText.textContent = `${correctCount} von ${sentencesData.length}`;
+      const percentage = (correctCount / sentencesData.length) * 100;
+      progressFill.style.width = `${percentage}%`;
+    }
+
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
